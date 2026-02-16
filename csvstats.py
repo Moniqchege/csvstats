@@ -1,8 +1,30 @@
 import argparse
+import csv
+
+
+def read_column(file_path, column_name):
+    values = []
+
+    with open(file_path, newline="") as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        if column_name not in reader.fieldnames:
+            raise ValueError(f"Column '{column_name}' not found.")
+
+        for row in reader:
+            try:
+                value = float(row[column_name])
+                values.append(value)
+            except ValueError:
+                # Skip non-numeric values
+                continue
+
+    return values
+
 
 def main():
     parser = argparse.ArgumentParser(
-        description = "Compute basic statistsics for a CSV column"
+        description="Compute basic statistics for a CSV column"
     )
 
     parser.add_argument("file", help="Path to CSV file")
@@ -10,8 +32,10 @@ def main():
 
     args = parser.parse_args()
 
-    print("File", args.file)
-    print("Column", args.column)
+    values = read_column(args.file, args.column)
 
-    if __name__ == "__main__":
-        main()
+    print("Values:", values)
+
+
+if __name__ == "__main__":
+    main()

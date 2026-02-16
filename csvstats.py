@@ -21,6 +21,20 @@ def read_column(file_path, column_name):
 
     return values
 
+def calculate_stats(values):
+    count = len(values)
+    total = sum(values)
+    mean = total / count
+    minimum = min(values)
+    maximum = max(values)
+
+    return {
+        "count": count,
+        "mean": mean,
+        "min": minimum,
+        "max": maximum,
+    }
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -35,6 +49,11 @@ def main():
     values = read_column(args.file, args.column)
 
     print("Values:", values)
+
+    stats = calculate_stats(values)
+
+    for key, value in stats.items():
+        print(f"{key}: {value}")
 
 
 if __name__ == "__main__":
